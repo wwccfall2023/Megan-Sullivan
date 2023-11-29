@@ -23,7 +23,7 @@ CREATE TABLE characters (
 );
 
 CREATE TABLE winners ( 
-  character_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  character_id INT UNSIGNED,
   `name` VARCHAR(30) NOT NULL,
   CONSTRAINT characters_fk_winners
     FOREIGN KEY (character_id) 
