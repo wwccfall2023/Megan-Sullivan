@@ -25,7 +25,7 @@ CREATE TABLE characters (
 CREATE TABLE winners ( 
   character_id INT UNSIGNED,
   `name` VARCHAR(30) NOT NULL,
-  CONSTRAINT characters_fk_winners
+  CONSTRAINT winners_fk_characters
     FOREIGN KEY (character_id) 
     REFERENCES characters (character_id)
     ON UPDATE CASCADE
