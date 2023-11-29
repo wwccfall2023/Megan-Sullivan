@@ -13,8 +13,8 @@ CREATE TABLE players (
 CREATE TABLE characters (
   character_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCRECMENT,
   player_id INT UNSIGNED NOT NULL,
-  `name` VARCHAR(30) NOT  NULL,
-  `level` INT UNSIGNED NOT  NULL
+  `name` VARCHAR(30) NOT NULL,
+  `level` INT UNSIGNED NOT NULL
   CONSTRAINT  player_id_fk_players
         FOREIGN KEY (player_id)
         REFERENCES players (player_id)
