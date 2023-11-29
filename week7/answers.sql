@@ -31,3 +31,14 @@ CREATE TABLE winners (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
+
+CREATE TABLE character_stats (
+  character_id INT UNSIGNED,
+  health INT UNSIGNED NOT NULL,
+  armor INT UNSIGNED NOT NULL,
+  CONSTRAINT character_stats_fk_characters
+    FOREIGN KEY (character_id) 
+    REFERENCES characters (character_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
