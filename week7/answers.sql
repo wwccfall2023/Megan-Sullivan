@@ -56,7 +56,7 @@ CREATE TABLE team_members (
     FOREIGN KEY (team_id)
     REFERENCES teams (team_id)
     ON UPDATE CASCADE
-    ON DELETE CASCADE
+    ON DELETE CASCADE,
   CONSTRAINT team_members_fk_characters
     FOREIGN KEY (character_id) 
     REFERENCES characters (character_id)
