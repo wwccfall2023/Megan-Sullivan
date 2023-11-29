@@ -13,8 +13,8 @@ CREATE TABLE players (
 CREATE TABLE characters (
   character_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
   player_id INT UNSIGNED NOT NULL,
-  `name` VARCHAR(30) NOT NULL,
-  `level` INT UNSIGNED NOT NULL,
+  character_name VARCHAR(30) NOT NULL,
+  character_level INT UNSIGNED NOT NULL,
   CONSTRAINT  characters_fk_players
     FOREIGN KEY (player_id)
     REFERENCES players (player_id)
@@ -24,7 +24,7 @@ CREATE TABLE characters (
 
 CREATE TABLE winners ( 
   character_id INT UNSIGNED,
-  `name` VARCHAR(30) NOT NULL,
+  winner_name VARCHAR(30) NOT NULL,
   CONSTRAINT winners_fk_characters
     FOREIGN KEY (character_id) 
     REFERENCES characters (character_id)
@@ -34,8 +34,8 @@ CREATE TABLE winners (
 
 CREATE TABLE character_stats (
   character_id INT UNSIGNED,
-  health INT UNSIGNED NOT NULL,
-  armor INT UNSIGNED NOT NULL,
+  character_health INT UNSIGNED NOT NULL,
+  character_armor INT UNSIGNED NOT NULL,
   CONSTRAINT character_stats_fk_characters
     FOREIGN KEY (character_id) 
     REFERENCES characters (character_id)
@@ -45,7 +45,7 @@ CREATE TABLE character_stats (
 
 CREATE TABLE teams (
   team_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(30) NOT NULL
+  team_name VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE team_members (
