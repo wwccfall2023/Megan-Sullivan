@@ -64,11 +64,44 @@ CREATE TABLE team_members (
     ON DELETE CASCADE
 );
 
+CREATE TABLE items (
+  item_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(30) NOT NULL,
+  armor INT UNSIGNED NOT NULL,
+  damage INT UNSIGNED NOT NULL
+);
 
+CREATE TABLE inventory (
+  inventory_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  character_id INT UNSIGNED,
+  item_id INT UNSIGNED,
+  CONSTRAINT inventory_fk_characters
+    FOREIGN KEY (character_id) 
+    REFERENCES characters (character_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  CONSTRAINT inventory_fk_items
+    FOREIGN KEY (item_id)
+    REFERENCES items (item_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
 
-
-
-
+CREATE TABLE equipped (
+  equipped_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  character_id INT UNSIGNED,
+  item_id INT UNSIGNED,
+  CONSTRAINT equipped_fk_characters
+    FOREIGN KEY (character_id) 
+    REFERENCES characters (character_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  CONSTRAINT equipped_fk_items
+    FOREIGN KEY (item_id)
+    REFERENCES items (item_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
 
 
 
