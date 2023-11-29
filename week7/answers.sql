@@ -42,3 +42,34 @@ CREATE TABLE character_stats (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
+
+CREATE TABLE teams (
+  team_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE team_members (
+  team_member_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  team_id INT UNSIGNED,
+  CONSTRAINT team_members_fk_teams
+    FOREIGN KEY (team_id)
+    REFERENCES teams (team_id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
