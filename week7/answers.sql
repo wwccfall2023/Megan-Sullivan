@@ -103,7 +103,9 @@ CREATE TABLE equipped (
     ON DELETE CASCADE
 );
 
-SELECT c.character_id, c.name AS character_name, i.name AS item_name, i.armor, i.damage
+SELECT c.character_id, c.name AS character_name, 
+  i.name AS item_name, 
+  i.armor, i.damage
 FROM characters c
 JOIN (
   -- Union the inventory and equipment tables to get all items carried by a character
@@ -112,7 +114,7 @@ JOIN (
   SELECT character_id, item_id FROM equipped
 ) AS carried ON c.character_id = carried.character_id
 JOIN items i ON carried.item_id = i.item_id
-ORDER BY c.character_id, i.name;
+-- ORDER BY c.character_id, i.name;
 
 
 
