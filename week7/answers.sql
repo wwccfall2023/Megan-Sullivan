@@ -214,3 +214,38 @@ BEGIN
   WHERE inventory_id = inventory_id;
 END;;
 DELIMITER ;
+
+DELIMITER ;;
+-- Create a procedure named unequip
+CREATE PROCEDURE unequip(equipped_id INT UNSIGNED)
+BEGIN
+  -- Declare variables to store the character_id and item_id of the equipped item
+  DECLARE character_id INT UNSIGNED DEFAULT 0;
+  DECLARE item_id INT UNSIGNED DEFAULT 0;
+  -- Get the character_id and item_id from the equipped table
+  SELECT character_id, item_id INTO character_id, item_id
+  FROM equipped
+  WHERE equipped_id = equipped_id;
+  -- Insert the item into the inventory table with the same character_id and item_id
+  INSERT INTO inventory (character_id, item_id)
+  VALUES (character_id, item_id);
+  -- Delete the item from the equipped table
+  DELETE FROM equipped
+  WHERE equipped_id = equipped_id;
+END;;
+DELIMITER ;
+
+DELIMITER ;;
+-- Create a procedure named set_winners
+CREATE PROCEDURE set_winners(team_id INT UNSIGNED)
+BEGIN
+  -- Delete all the existing records from the winners table
+  DELETE FROM winners;
+  -- Insert the characters from the passed team into the winners table
+  INSERT INTO winners (character_id, name)
+  SELECT c.character_id, c.name
+  FROM characters c
+  JOIN team_members tm ON c.character_id = tm.character_id
+  WHERE tm.team_id = team_id;
+END;;
+DELIMITER ;
