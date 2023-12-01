@@ -188,10 +188,10 @@ BEGIN
       DELETE FROM characters
       WHERE character_id = id_of_character_being_attacked;
     END IF;
-  -- Else, if the net damage is zero or negative, do nothing
-  ELSE
-    -- No action needed
-  END IF;
-END;
+--   -- Else, if the net damage is zero or negative, do nothing
+--   ELSE
+--     -- No action needed
+END IF;
+END;;
 DELIMITER ;
 
