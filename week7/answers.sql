@@ -149,7 +149,7 @@ BEGIN
   WHERE e.character_id = character_id;
   -- Return the total armor
   RETURN total_armor;
-END
+END //
 DELIMITER /
 
 
