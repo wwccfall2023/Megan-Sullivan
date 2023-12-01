@@ -131,7 +131,7 @@ GROUP BY t.team_id, i.item_id -- Deduplicate the items by team and item
 ORDER BY t.team_id, i.name;
 
 -- Create a function named armor_total
-DELIMITER ;;
+DELIMITER //
 CREATE FUNCTION armor_total(character_id INT UNSIGNED)
 RETURNS INT
 DETERMINISTIC
@@ -150,7 +150,7 @@ BEGIN
   -- Return the total armor
   RETURN total_armor;
 END
-DELIMITER ;
+DELIMITER /
 
 
 
