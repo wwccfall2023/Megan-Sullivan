@@ -87,34 +87,32 @@ CREATE TABLE inventory (
     ON DELETE CASCADE
 );
 
-CREATE TABLE equipped (
-  equipped_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  character_id INT UNSIGNED,
-  item_id INT UNSIGNED,
-  CONSTRAINT equipped_fk_characters
-    FOREIGN KEY (character_id) 
-    REFERENCES characters (character_id)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE,
-  CONSTRAINT equipped_fk_items
-    FOREIGN KEY (item_id)
-    REFERENCES items (item_id)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE
-);
-
-SELECT c.character_id, c.name AS character_name, 
-  i.name AS item_name, 
-  i.armor, i.damage
+CREATE VIEW character_items AS
+SELECT c.character_id, c.name AS character_name, i.name AS item_name, i.armor, i.damage
 FROM characters c
 JOIN (
-  -- Union the inventory and equipment tables to get all items carried by a character
+  -- Union the inventory and equipped tables to get all items carried by a character
   SELECT character_id, item_id FROM inventory
   UNION
   SELECT character_id, item_id FROM equipped
 ) AS carried ON c.character_id = carried.character_id
 JOIN items i ON carried.item_id = i.item_id
--- ORDER BY c.character_id, i.name;
+GROUP BY c.character_id, i.item_id -- Deduplicate the items by character and item
+ORDER BY c.character_id, i.name;
+
+CREATE VIEW team_items AS
+SELECT t.team_id, t.name AS team_name, i.name AS item_name, i.armor, i.damage
+FROM teams t
+JOIN team_members tm ON t.team_id = tm.team_id
+JOIN (
+  -- Union the inventory and equipped tables to get all items carried by a character
+  SELECT character_id, item_id FROM inventory
+  UNION
+  SELECT character_id, item_id FROM equipped
+) AS carried ON tm.character_id = carried.character_id
+JOIN items i ON carried.item_id = i.item_id
+GROUP BY t.team_id, i.item_id -- Deduplicate the items by team and item
+ORDER BY t.team_id, i.name;
 
 
 
