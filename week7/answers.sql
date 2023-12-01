@@ -195,3 +195,22 @@ END IF;
 END;;
 DELIMITER ;
 
+DELIMITER ;;
+-- Create a procedure named equip
+CREATE PROCEDURE equip(inventory_id INT UNSIGNED)
+BEGIN
+  -- Declare variables to store the character_id and item_id of the inventory item
+  DECLARE character_id INT UNSIGNED DEFAULT 0;
+  DECLARE item_id INT UNSIGNED DEFAULT 0;
+  -- Get the character_id and item_id from the inventory table
+  SELECT character_id, item_id INTO character_id, item_id
+  FROM inventory
+  WHERE inventory_id = inventory_id;
+  -- Insert the item into the equipped table with the same character_id and item_id
+  INSERT INTO equipped (character_id, item_id)
+  VALUES (character_id, item_id);
+  -- Delete the item from the inventory table
+  DELETE FROM inventory
+  WHERE inventory_id = inventory_id;
+END;;
+DELIMITER ;
