@@ -130,7 +130,27 @@ JOIN items i ON carried.item_id = i.item_id
 GROUP BY t.team_id, i.item_id -- Deduplicate the items by team and item
 ORDER BY t.team_id, i.name;
 
-
+-- Create a function named armor_total
+DELIMITER ;;
+CREATE FUNCTION armor_total(character_id INT UNSIGNED)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+  -- Declare a variable to store the total armor
+  DECLARE total_armor INT DEFAULT 0;
+  -- Add the armor from the character's stats
+  SELECT armor INTO total_armor
+  FROM character_stats
+  WHERE character_id = character_id;
+  -- Add the armor from the items the character has equipped
+  SELECT SUM(i.armor) INTO total_armor
+  FROM equipped e
+  JOIN items i ON e.item_id = i.item_id
+  WHERE e.character_id = character_id;
+  -- Return the total armor
+  RETURN total_armor;
+END
+DELIMITER ;
 
 
 
