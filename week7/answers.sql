@@ -205,13 +205,13 @@ BEGIN
   -- Get the character_id and item_id from the inventory table
   SELECT character_id, item_id INTO cid, iid
   FROM inventory
-  WHERE inventory_id = inventory_id;
+  WHERE inventory_id = iid;
   -- Insert the item into the equipped table with the same character_id and item_id
   INSERT INTO equipped (character_id, item_id)
   VALUES (cid, iid);
   -- Delete the item from the inventory table
   DELETE FROM inventory
-  WHERE inventory_id = inventory_id;
+  WHERE inventory_id = iid;
 END;;
 DELIMITER ;
 
