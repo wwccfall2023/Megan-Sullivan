@@ -197,7 +197,7 @@ DELIMITER ;
 
 DELIMITER ;;
 -- Create a procedure named equip
-CREATE PROCEDURE equip(inventory_id INT UNSIGNED)
+CREATE PROCEDURE equip(inid INT UNSIGNED)
 BEGIN
   -- Declare variables to store the character_id and item_id of the inventory item
   DECLARE cid INT UNSIGNED DEFAULT 0;
@@ -205,13 +205,13 @@ BEGIN
   -- Get the character_id and item_id from the inventory table
   SELECT character_id, item_id INTO cid, iid
   FROM inventory
-  WHERE inventory_id = iid;
+  WHERE inventory_id = inid;
   -- Insert the item into the equipped table with the same character_id and item_id
   INSERT INTO equipped (character_id, item_id)
   VALUES (cid, iid);
   -- Delete the item from the inventory table
   DELETE FROM inventory
-  WHERE inventory_id = iid;
+  WHERE inventory_id = inid;
 END;;
 DELIMITER ;
 
