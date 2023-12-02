@@ -177,9 +177,9 @@ BEGIN
     -- Subtract the net damage from the current health to get the new health
     SET new_health = new_health - damage;
     -- If the new health is positive, update the character_stats table with the new health
-    IF new_health > 0 THEN
+    IF cs.health > 0 THEN
       UPDATE cs.character_stats
-      SET new_health = new_health
+      SET cs.health = new_health
       WHERE cs_character_id = id_of_character_being_attacked;
     -- Else, if the new health is zero or negative, delete the character from the database
     ELSE
@@ -187,11 +187,11 @@ BEGIN
       -- This will also delete the character from the winners, character_stats, team_members, inventory, and equipped tables due to the cascade option on the foreign keys
       DELETE FROM characters c
       WHERE c.character_id = id_of_character_being_attacked;
-    END IF;
+	END IF;
 --   -- Else, if the net damage is zero or negative, do nothing
---   ELSE
+	-- ELSE
 --     -- No action needed
-END IF;
+	END IF;
 END;;
 DELIMITER ;
 
