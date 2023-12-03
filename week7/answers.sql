@@ -106,27 +106,27 @@ CREATE TABLE equipped (
 CREATE VIEW character_items AS
 SELECT c.character_id, c.name AS character_name, i.name AS item_name, i.armor, i.damage
 FROM characters c
-JOIN (
+INNER JOIN (
   -- Union the inventory and equipped tables to get all items carried by a character
   SELECT character_id, item_id FROM inventory
   UNION
   SELECT character_id, item_id FROM equipped
 ) AS carried ON c.character_id = carried.character_id
-JOIN items i ON carried.item_id = i.item_id
+INNER JOIN items i ON carried.item_id = i.item_id
 GROUP BY c.character_id, i.item_id -- Deduplicate the items by character and item
 ORDER BY c.character_id, i.name;
 
 CREATE VIEW team_items AS
 SELECT t.team_id, t.name AS team_name, i.name AS item_name, i.armor, i.damage
 FROM teams t
-JOIN team_members tm ON t.team_id = tm.team_id
-JOIN (
+INNER JOIN team_members tm ON t.team_id = tm.team_id
+INNER JOIN (
   -- Union the inventory and equipped tables to get all items carried by a character
   SELECT character_id, item_id FROM inventory
   UNION
   SELECT character_id, item_id FROM equipped
 ) AS carried ON tm.character_id = carried.character_id
-JOIN items i ON carried.item_id = i.item_id
+INNER JOIN items i ON carried.item_id = i.item_id
 GROUP BY t.team_id, i.item_id -- Deduplicate the items by team and item
 ORDER BY t.team_id, i.name;
 
@@ -245,7 +245,7 @@ BEGIN
   INSERT INTO winners (character_id, name)
   SELECT c.character_id, c.name
   FROM characters c
-  JOIN team_members tm ON c.character_id = tm.character_id
+  INNER JOIN team_members tm ON c.character_id = tm.character_id
   WHERE tm.team_id = team_id;
 END;;
 DELIMITER ;
