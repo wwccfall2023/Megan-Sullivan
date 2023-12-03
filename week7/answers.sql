@@ -163,19 +163,19 @@ BEGIN
   -- Call the armor_total function to get the armor of the character being attacked
   SET new_armor = armor_total(id_of_character_being_attacked);
   -- Get the damage of the item being used to attack from the items table
-  SELECT damage INTO new_damage
+  SELECT i.damage INTO new_damage
   FROM items i
   WHERE i.item_id = id_of_equipped_item_used_for_attack;
   -- Subtract the armor from the damage to get the net damage
-  SET new_damage = new_damage - new_armor;
+  SET new_damage = i.damage - new_armor;
   -- If the net damage is positive, proceed to update the character's health
   IF new_damage > 0 THEN
     -- Get the current health of the character being attacked from the character_stats table
-    SELECT health INTO new_health
+    SELECT cs.health INTO new_health
     FROM character_stats cs
     WHERE cs.character_id = id_of_character_being_attacked;
     -- Subtract the net damage from the current health to get the new health
-    SET new_health = new_health - new_damage;
+    SET new_health = cs.health - new_damage;
     -- If the new health is positive, update the character_stats table with the new health
     IF cs.health > 0 THEN
       UPDATE cs.character_stats
