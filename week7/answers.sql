@@ -104,7 +104,7 @@ CREATE TABLE equipped (
 );
 
 CREATE VIEW character_items AS
-SELECT c.character_id, c.name AS character_name, i.name AS item_name, /*i.armor,*/ i.damage
+SELECT c.character_id, c.name AS character_name, i.name AS item_name, i.armor, i.damage
 FROM characters c
 INNER JOIN (
   -- Union the inventory and equipped tables to get all items carried by a character
@@ -117,7 +117,7 @@ GROUP BY c.character_id, i.item_id -- Deduplicate the items by character and ite
 ORDER BY c.character_id, i.name;
 
 CREATE VIEW team_items AS
-SELECT t.team_id, t.name AS team_name, i.name AS item_name, /*i.armor,*/ i.damage
+SELECT t.team_id, t.name AS team_name, i.name AS item_name, i.armor, i.damage
 FROM teams t
 INNER JOIN team_members tm ON t.team_id = tm.team_id
 INNER JOIN (
