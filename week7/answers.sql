@@ -154,39 +154,39 @@ DELIMITER ;
 
 DELIMITER ;;
 -- Create a procedure named attack
-CREATE PROCEDURE attack(id_of_character_being_attacked INT UNSIGNED, id_of_equipped_item_used_for_attack INT UNSIGNED)
+CREATE PROCEDURE attack(attacked_char_id INT UNSIGNED, item_attack_id INT UNSIGNED)
 BEGIN
   -- Declare variables to store the armor, damage, and health of the character being attacked
   DECLARE new_armor INT DEFAULT 0;
   DECLARE new_damage INT DEFAULT 0;
   DECLARE new_health INT DEFAULT 0;
   -- Call the armor_total function to get the armor of the character being attacked
-  SET new_armor = armor_total(id_of_character_being_attacked);
+  SET new_armor = armor_total(attacked_char_id);
   -- Get the damage of the item being used to attack from the items table
   SELECT i.damage INTO new_damage
   FROM items i
-  WHERE item_id = id_of_equipped_item_used_for_attack;
+  WHERE i.item_id = item_attack_id;
   -- Subtract the armor from the damage to get the net damage
-  SET new_damage = new_damage - armor;
+  SET new_damage = new_damage - new_armor;
   -- If the net damage is positive, proceed to update the character's health
   IF new_damage > 0 THEN
     -- Get the current health of the character being attacked from the character_stats table
     SELECT cs.health INTO new_health
     FROM character_stats cs
-    WHERE cs.character_id = id_of_character_being_attacked;
+    WHERE cs.character_id = attacked_char_id;
     -- Subtract the net damage from the current health to get the new health
     SET new_health = new_health - damage;
     -- If the new health is positive, update the character_stats table with the new health
     IF cs.health > 0 THEN
       UPDATE character_stats cs
       SET new_health = cs.health
-      WHERE cs.character_id = id_of_character_being_attacked;
+      WHERE cs.character_id = attacked_char_id;
     -- Else, if the new health is zero or negative, delete the character from the database
     ELSE
       -- Delete the character from the characters table
       -- This will also delete the character from the winners, character_stats, team_members, inventory, and equipped tables due to the cascade option on the foreign keys
       DELETE FROM characters c
-      WHERE c.character_id = id_of_character_being_attacked;
+      WHERE c.character_id = attacked_char_id;
     END IF;
 --   -- Else, if the net damage is zero or negative, do nothing
 --   ELSE
