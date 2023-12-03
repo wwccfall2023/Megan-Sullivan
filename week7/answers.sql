@@ -143,7 +143,7 @@ BEGIN
   FROM character_stats cs
   WHERE character_id = cs.character_id;
   -- Add the armor from the items the character has equipped
-  SELECT SUM(e.armor) INTO total_armor
+  SELECT SUM(cs.armor) INTO total_armor
   FROM equipped e
   INNER JOIN items i ON e.item_id = i.item_id
   WHERE character_id = e.character_id;
