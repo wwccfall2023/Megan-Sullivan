@@ -146,7 +146,7 @@ BEGIN
   SELECT SUM(i.armor) INTO total_armor
   FROM equipped e
   INNER JOIN items i ON e.item_id = i.item_id
-  WHERE e.character_id = cs.character_id;
+  WHERE e.character_id = character_id;
   -- Return the total armor
   RETURN total_armor;
 END;;
