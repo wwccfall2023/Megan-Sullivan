@@ -139,14 +139,14 @@ BEGIN
   -- Declare a variable to store the total armor
   DECLARE total_armor INT DEFAULT 0;
   -- Add the armor from the character's stats
-  SELECT armor INTO total_armor
-  FROM character_stats
-  WHERE character_id = character_id;
+  SELECT cs.armor INTO total_armor
+  FROM character_stats cs
+  WHERE character_id = cs.character_id;
   -- Add the armor from the items the character has equipped
   SELECT SUM(i.armor) INTO total_armor
   FROM equipped e
-  JOIN items i ON e.item_id = i.item_id
-  WHERE e.character_id = character_id;
+  INNER JOIN items i ON e.item_id = i.item_id
+  WHERE e.character_id = cs.character_id;
   -- Return the total armor
   RETURN total_armor;
 END;;
