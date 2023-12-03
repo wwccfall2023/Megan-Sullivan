@@ -165,9 +165,9 @@ BEGIN
   -- Get the damage of the item being used to attack from the items table
   SELECT i.damage INTO new_damage
   FROM items i
-  WHERE i.item_id = id_of_equipped_item_used_for_attack;
+  WHERE item_id = id_of_equipped_item_used_for_attack;
   -- Subtract the armor from the damage to get the net damage
-  SET new_damage = i.damage - new_armor;
+  SET new_damage = new_damage - armor;
   -- If the net damage is positive, proceed to update the character's health
   IF new_damage > 0 THEN
     -- Get the current health of the character being attacked from the character_stats table
@@ -175,23 +175,23 @@ BEGIN
     FROM character_stats cs
     WHERE cs.character_id = id_of_character_being_attacked;
     -- Subtract the net damage from the current health to get the new health
-    SET new_health = cs.health - new_damage;
+    SET new_health = new_health - damage;
     -- If the new health is positive, update the character_stats table with the new health
     IF cs.health > 0 THEN
-      UPDATE cs.character_stats
-      SET cs.health = new_health
-      WHERE cs_character_id = id_of_character_being_attacked;
+      UPDATE character_stats cs
+      SET new_health = cs.health
+      WHERE cs.character_id = id_of_character_being_attacked;
     -- Else, if the new health is zero or negative, delete the character from the database
     ELSE
       -- Delete the character from the characters table
       -- This will also delete the character from the winners, character_stats, team_members, inventory, and equipped tables due to the cascade option on the foreign keys
       DELETE FROM characters c
       WHERE c.character_id = id_of_character_being_attacked;
-	END IF;
+    END IF;
 --   -- Else, if the net damage is zero or negative, do nothing
-	-- ELSE
+--   ELSE
 --     -- No action needed
-	END IF;
+END IF;
 END;;
 DELIMITER ;
 
