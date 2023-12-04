@@ -141,7 +141,7 @@ BEGIN
   -- Add the armor from the character's stats
   SELECT SUM(cs.armor) INTO total_armor
   FROM character_stats cs
-  WHERE character_id = cs.character_id;
+  WHERE cs.character_id = character_id;
   -- Add the armor from the items the character has equipped
   SELECT SUM(i.armor) INTO total_armor
   FROM equipped e
