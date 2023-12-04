@@ -179,7 +179,7 @@ BEGIN
     -- If the new health is positive, update the character_stats table with the new health
     IF new_health > 0 THEN
       UPDATE character_stats cs
-      SET new_health = cs.health
+      SET cs.health = new_health
       WHERE cs.character_id = attacked_char_id;
     -- Else, if the new health is zero or negative, delete the character from the database
     ELSE
