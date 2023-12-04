@@ -175,7 +175,7 @@ BEGIN
     FROM character_stats cs
     WHERE cs.character_id = attacked_char_id;
     -- Subtract the net damage from the current health to get the new health
-    SET new_health = new_health - damage;
+    SET new_health = new_health - new_damage;
     -- If the new health is positive, update the character_stats table with the new health
     IF new_health > 0 THEN
       UPDATE character_stats cs
