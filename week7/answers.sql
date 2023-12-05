@@ -137,7 +137,7 @@ RETURNS INT
 DETERMINISTIC
 BEGIN
   -- Declare a variable to store the total armor
-  DECLARE total_armor INT DEFAULT 0;
+  -- DECLARE total_armor INT DEFAULT 0;
   DECLARE cs_armor INT DEFAULT 0;
   DECLARE i_armor INT DEFAULT 0;
   -- Add the armor from the character's stats
