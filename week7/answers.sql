@@ -161,7 +161,7 @@ BEGIN
   DECLARE new_damage INT DEFAULT 0;
   DECLARE new_health INT DEFAULT 0;
   -- Call the armor_total function to get the armor of the character being attacked
-  SET new_armor = armor_total(a_t_character_id);
+  SET new_armor = armor_total(attacked_char_id);
   -- Get the damage of the item being used to attack from the items table
   SELECT i.damage INTO new_damage
   FROM items i
