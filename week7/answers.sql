@@ -131,6 +131,7 @@ GROUP BY t.team_id, i.item_id -- Deduplicate the items by team and item
 ORDER BY t.team_id, i.name;
 
 -- Create a function named armor_total
+
 DELIMITER ;;
 CREATE FUNCTION armor_total(character_id INT UNSIGNED)
 RETURNS INT
@@ -165,6 +166,8 @@ BEGIN
   -- Get the damage of the item being used to attack from the items table
   SELECT i.damage INTO new_damage
   FROM items i
+  INNER JOIN equipped e
+    ON i.item_id = e.item_id
   WHERE i.item_id = item_attack_id;
   -- Subtract the armor from the damage to get the net damage
   SET new_damage = new_damage - new_armor;
