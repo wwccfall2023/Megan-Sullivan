@@ -207,7 +207,7 @@ BEGIN
   FROM inventory i
   WHERE i.inventory_id = equip_inventory_id;
   -- Insert the item into the equipped table with the same character_id and item_id
-  INSERT INTO equipped (i.character_id, i.item_id)
+  INSERT INTO equipped (character_id, item_id)
   VALUES (cid, iid);
   -- Delete the item from the inventory table
   DELETE FROM inventory i
