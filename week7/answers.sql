@@ -159,7 +159,7 @@ DELIMITER ;
 
 DELIMITER ;;
 -- Create a procedure named attack
-CREATE PROCEDURE attack(attacked_char_id INT UNSIGNED, item_attack_id INT UNSIGNED)
+CREATE PROCEDURE attack(attacked_char_id INT UNSIGNED, equipped_id INT UNSIGNED)
 BEGIN
   -- Declare variables to store the armor, damage, and health of the character being attacked
   DECLARE new_armor INT DEFAULT 0;
@@ -172,7 +172,7 @@ BEGIN
   FROM items i
   INNER JOIN equipped e
     ON i.item_id = e.item_id
-  WHERE i.item_id = item_attack_id;
+  WHERE e.equipped_id = equipped_id;
   -- Subtract the armor from the damage to get the net damage
   SET new_damage = new_damage - new_armor;
   -- If the net damage is positive, proceed to update the character's health
