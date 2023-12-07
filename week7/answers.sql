@@ -244,6 +244,45 @@ DELIMITER ;
 
 DELIMITER ;;
 -- Create a procedure named set_winners
+-- set_winners(team_id): Update the winners table so that only the characters in the passed team on in the winners table.
+CREATE PROCEDURE set_winners(team_id INT UNSIGNED)
+BEGIN
+  -- Delete all the existing records from the winners table
+    DECLARE id INT UNSIGNED;
+    DECLARE winner_name VARCHAR(30);
+    DECLARE row_not_found TINYINT DEFAULT FALSE;
+    
+	DECLARE characters_cursor CURSOR FOR
+		SELECT c.character_id, c.name
+			FROM characters c
+				INNER JOIN team_members tm 
+                ON c.character_id = tm.character_id
+			WHERE tm.team_id = team_id;
+            
+	DECLARE CONTINUE HANDLER FOR NOT FOUND
+		SET row_not_found = TRUE;
+        
+	DELETE FROM winners;
+    
+    OPEN characters_cursor;
+    character_loop : LOOP
+		FETCH characters_cursor INTO id, winner_name;
+        IF row_not_found THEN
+			LEAVE character_loop;
+		END IF;
+        
+        INSERT INTO winners
+			(character_id, winner_name)
+		VALUES
+			(id, name);
+			
+	END LOOP character_loop;
+END;;
+DELIMITER ;
+
+/*
+DELIMITER ;;
+-- Create a procedure named set_winners
 CREATE PROCEDURE set_winners(team_id INT UNSIGNED)
 BEGIN
   -- Delete all the existing records from the winners table
@@ -256,3 +295,4 @@ BEGIN
   WHERE tm.team_id = team_id;
 END;;
 DELIMITER ;
+*/
