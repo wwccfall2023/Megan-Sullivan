@@ -272,9 +272,9 @@ BEGIN
 		END IF;
         
         INSERT INTO winners
-			(character_id, winner_name)
+			(character_id, name)
 		VALUES
-			(id, name);
+			(id, winner_name);
 			
 	END LOOP character_loop;
 END;;
