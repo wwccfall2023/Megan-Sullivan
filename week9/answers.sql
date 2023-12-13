@@ -1,3 +1,8 @@
+
+-- Create your tables, views, functions and procedures here!
+DROP SCHEMA IF EXISTS social;
+CREATE SCHEMA social;
+USE social;
 -- Create your tables, views, functions and procedures here!
 DROP SCHEMA IF EXISTS social;
 CREATE SCHEMA social;
@@ -71,7 +76,7 @@ CREATE TABLE notifications (
     REFERENCES posts (post_id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
-)
+);
 
 /*
 -- Create 'users' table by Bing AI
@@ -121,7 +126,6 @@ CREATE TABLE notifications (
 );
 */
 
--- Create 'notification_posts' VIEW
 CREATE VIEW notification_posts AS
 SELECT 
 	n.user_id,
@@ -130,5 +134,7 @@ SELECT
 	p.post_id,
 	p.content
 FROM notifications n
-LEFT JOIN users u ON n.user_id = u.user_id
-LEFT JOIN posts p ON n.post_id = p.post_id;
+INNER JOIN users u ON n.user_id = u.user_id
+INNER JOIN posts p ON n.post_id = p.post_id;
+
+
