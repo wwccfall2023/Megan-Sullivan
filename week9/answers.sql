@@ -144,7 +144,7 @@ INNER JOIN users u ON n.user_id = u.user_id
 INNER JOIN posts p ON n.post_id = p.post_id;
 */
 
-/*
+
 DELIMITER ;;
 CREATE TRIGGER after_user_insert
 AFTER INSERT ON users
@@ -156,7 +156,7 @@ BEGIN
   WHERE user_id != NEW.user_id;
 END;;
 DELIMITER ;
-*/
+
 
 /*
 DELIMITER ;;
