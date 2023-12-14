@@ -151,9 +151,9 @@ AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
   INSERT INTO notifications (user_id, post_id)
-  SELECT user_id, post
-  FROM notifications
-  WHERE user_id != NEW.user_id;
+  SELECT first_name, last_name
+  FROM users
+  WHERE created_on != NEW.created_on;
 END;;
 DELIMITER ;
 
