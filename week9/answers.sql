@@ -146,12 +146,12 @@ INNER JOIN posts p ON n.post_id = p.post_id;
 
 
 DELIMITER ;;
-CREATE TRIGGER after_user_insert
+CREATE TRIGGER new_user_added
 AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
   INSERT INTO notifications (user_id, post_id)
-  SELECT user_id, first_name, last_name
+  SELECT first_name, last_name
   FROM users
   WHERE user_id != NEW.user_id;
 END;;
