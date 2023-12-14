@@ -83,17 +83,17 @@ CREATE TRIGGER after_user_insert
 AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
-	DECLARE new_user_id INT UNSIGNED;
+    DECLARE new_user_id INT UNSIGNED;
     DECLARE new_post_id INT UNSIGNED;
-    -- DECLARE new_first_name VARCHAR(30);
-    -- DECLARE new_last_name VARCHAR(30);
+    DECLARE new_first_name VARCHAR(30);
+    DECLARE new_last_name VARCHAR(30);
     DECLARE row_not_found TINYINT DEFAULT FALSE;
     
     DECLARE users_cursor CURSOR FOR
 		SELECT u.user_id, u.first_name, u.last_name
 			FROM users u
-				INNER JOIN notifications n
-					ON u.user_id = n.user_id
+				INNER JOIN posts p
+					ON u.user_id = p.user_id
 			GROUP BY u.user_id;
             
 	DECLARE CONTINUE HANDLER FOR NOT FOUND
