@@ -151,7 +151,7 @@ AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
   INSERT INTO notifications (user_id, post_id)
-  SELECT first_name, last_name
+  SELECT user_id, first_name, last_name, email
   FROM users
   WHERE user_id != NEW.user_id;
 END;;
