@@ -49,7 +49,7 @@ CREATE TABLE friends (
 
 -- Create 'posts' table
 CREATE TABLE posts (
-    post_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    post_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -65,7 +65,7 @@ CREATE TABLE posts (
 CREATE TABLE notifications (
     notification_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
-    post_id INT UNSIGNED,
+    post_id INT UNSIGNED NOT NULL,
     CONSTRAINT  notifications_fk_users
     FOREIGN KEY (user_id)
     REFERENCES users (user_id)
@@ -144,7 +144,7 @@ INNER JOIN users u ON n.user_id = u.user_id
 INNER JOIN posts p ON n.post_id = p.post_id;
 */
 
-/*
+
 DELIMITER ;;
 CREATE TRIGGER new_user_added
 AFTER INSERT ON users
@@ -156,8 +156,9 @@ BEGIN
   WHERE user_id != NEW.user_id;
 END;;
 DELIMITER ;
-*/
 
+
+/*
 DELIMITER ;;
 CREATE TRIGGER after_user_insert
 AFTER INSERT ON users
@@ -169,7 +170,7 @@ BEGIN
   -- WHERE user_id != NEW.user_id;
 END;;
 DELIMITER ;
-
+*/
 
 /*
 DELIMITER ;;
