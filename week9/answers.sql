@@ -60,7 +60,7 @@ CREATE TABLE posts (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
-/*
+
 -- Create 'notifications' table
 CREATE TABLE notifications (
     notification_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -77,7 +77,7 @@ CREATE TABLE notifications (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
-*/
+
 
 
 
