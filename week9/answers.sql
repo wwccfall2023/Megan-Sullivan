@@ -78,7 +78,44 @@ CREATE TABLE notifications (
     ON DELETE CASCADE
 );
 
-
+DELIMITER ;;
+CREATE TRIGGER after_user_insert
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+	DECLARE new_user_id INT UNSIGNED;
+    DECLARE new_post_id INT UNSIGNED;
+    -- DECLARE new_first_name VARCHAR(30);
+    -- DECLARE new_last_name VARCHAR(30);
+    DECLARE row_not_found TINYINT DEFAULT FALSE;
+    
+    DECLARE users_cursor CURSOR FOR
+		SELECT u.user_id, u.first_name, u.last_name
+			FROM users u
+				INNER JOIN notifications n
+					ON u.user_id = n.user_id
+			GROUP BY u.user_id;
+            
+	DECLARE CONTINUE HANDLER FOR NOT FOUND
+		SET row_not_found = TRUE;
+        
+	DELETE FROM notifications;
+    
+    OPEN users_cursor;
+    user_loop : LOOP
+		FETCH users_cursor INTO new_user_id, new_post_id;
+        IF row_not_found THEN
+			LEAVE user_loop;
+		END IF;
+        
+        INSERT INTO notifications
+			(user_id, post_id)
+		VALUES
+			(new_user_id, new_post_id);
+			
+	END LOOP user_loop;
+END;;
+DELIMITER ;
 
 
 
@@ -144,7 +181,7 @@ INNER JOIN users u ON n.user_id = u.user_id
 INNER JOIN posts p ON n.post_id = p.post_id;
 */
 
-
+/*
 DELIMITER ;;
 CREATE TRIGGER new_user_added
 AFTER INSERT ON users
@@ -154,20 +191,6 @@ BEGIN
   SELECT user_id, NULL
   FROM users
   WHERE user_id != NEW.user_id;
-END;;
-DELIMITER ;
-
-
-/*
-DELIMITER ;;
-CREATE TRIGGER after_user_insert
-AFTER INSERT ON users
-FOR EACH ROW
-BEGIN
-  UPDATE notifications SET user_id = NEW.user_id WHERE user_id != NEW.user_id;
-  -- SELECT user_id, NULL
-  -- FROM users
-  -- WHERE user_id != NEW.user_id;
 END;;
 DELIMITER ;
 */
