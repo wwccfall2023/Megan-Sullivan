@@ -133,7 +133,7 @@ DO
 DELETE FROM sessions 
 WHERE updated_on < NOW() - INTERVAL 2 HOUR;
 
-
+/*
 DELIMITER ;;
 CREATE PROCEDURE add_post(IN user_id_arg INT, IN content_arg TEXT)
 BEGIN
@@ -165,4 +165,4 @@ BEGIN
   CLOSE friend_cursor;
 END;;
 DELIMITER ;
-
+*/
