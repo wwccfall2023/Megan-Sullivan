@@ -85,35 +85,31 @@ FOR EACH ROW
 BEGIN
     DECLARE new_user_id INT UNSIGNED;
     DECLARE new_post_id INT UNSIGNED;
-    DECLARE new_first_name VARCHAR(30);
-    DECLARE new_last_name VARCHAR(30);
+    DECLARE new_friend_id INT UNSIGNED;
     DECLARE row_not_found TINYINT DEFAULT FALSE;
-    
-    DECLARE users_cursor CURSOR FOR
-		SELECT u.user_id, p.post_id
-			FROM users u
-				INNER JOIN posts p
-					ON u.user_id = p.user_id;
-			-- GROUP BY u.user_id;
+	
+    DECLARE users_cursor CURSOR FOR 
+		SELECT user_id 
+		FROM users 
+			WHERE user_id != NEW.user_id;
             
 	DECLARE CONTINUE HANDLER FOR NOT FOUND
 		SET row_not_found = TRUE;
         
+	INSERT INTO posts (user_id, content) VALUES (NEW.user_id, 'just joined!');
+	SET new_post_id = LAST_INSERT_ID();
+        
 	DELETE FROM notifications;
     
     OPEN users_cursor;
-    user_loop : LOOP
-		FETCH users_cursor INTO new_user_id, new_post_id;
-        IF row_not_found THEN
+	user_loop: LOOP
+    FETCH users_cursor INTO new_user_id;
+    IF row_not_found THEN
 			LEAVE user_loop;
 		END IF;
-        
-        INSERT INTO notifications
-			(user_id, post_id)
-		VALUES
-			(new_user_id, new_post_id);
-			
-	END LOOP user_loop;
+    INSERT INTO notifications (user_id, post_id) VALUES (new_user_id, new_post_id);
+  END LOOP;
+  CLOSE users_cursor;
 END;;
 DELIMITER ;
 
