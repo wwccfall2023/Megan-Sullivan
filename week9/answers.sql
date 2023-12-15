@@ -84,8 +84,8 @@ CREATE TABLE notifications (
 CREATE VIEW notification_posts AS
 SELECT n.user_id, u.first_name, u.last_name, p.post_id, p.content
 FROM notifications n
-LEFT OUTER JOIN users u ON n.user_id = u.user_id
-LEFT OUTER JOIN posts p ON n.post_id = p.post_id;
+LEFT JOIN users u ON n.user_id = u.user_id
+LEFT JOIN posts p ON n.post_id = p.post_id;
 
 
 
@@ -135,7 +135,7 @@ WHERE updated_on < NOW() - INTERVAL 2 HOUR;
 
 
 DELIMITER ;;
-CREATE PROCEDURE add_post(IN user_id INT, IN content TEXT)
+CREATE PROCEDURE add_post(IN user_id_arg INT, IN content_arg TEXT)
 BEGIN
   DECLARE new_post_id INT;
   DECLARE new_friend_id INT;
@@ -144,14 +144,14 @@ BEGIN
   DECLARE friend_cursor CURSOR FOR 
   SELECT f.friend_id 
   FROM friends f
-  WHERE f.user_id = user_id;
+  WHERE f.user_id = user_id_arg;
   
   DECLARE CONTINUE HANDLER FOR NOT FOUND
-    SET row_not_found = TRUE;
+  SET row_not_found = TRUE;
 
   -- Create a new post with the desired message
-  INSERT INTO posts (posts.user_id, posts.content) VALUES (user_id, content);
-    SET new_post_id = LAST_INSERT_ID();
+  INSERT INTO posts (posts.user_id, posts.content) VALUES (user_id_arg, content_arg);
+  SET new_post_id = LAST_INSERT_ID();
 
   -- Add a notification for each of the user's friends
   OPEN friend_cursor;
@@ -160,7 +160,7 @@ BEGIN
     IF row_not_found THEN
 	LEAVE friend_loop;
     END IF;
-    INSERT INTO notifications (user_id, post_id) VALUES (new_friend_id, new_post_id);
+    INSERT INTO notifications (user_id_arg, post_id_arg) VALUES (new_friend_id, new_post_id);
   END LOOP;
   CLOSE friend_cursor;
 END;;
