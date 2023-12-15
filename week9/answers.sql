@@ -84,8 +84,8 @@ CREATE TABLE notifications (
 CREATE VIEW notification_posts AS
 SELECT n.user_id, u.first_name, u.last_name, p.post_id, p.content
 FROM notifications n
-LEFT JOIN posts p ON n.post_id = p.post_id
-LEFT JOIN users u ON n.user_id = u.user_id;
+LEFT JOIN users u ON n.user_id = u.user_id
+LEFT JOIN posts p ON n.post_id = p.post_id;
 
 
 
