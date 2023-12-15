@@ -109,52 +109,34 @@ BEGIN
 		FROM users 
 		WHERE user_id != NEW.user_id;
             
-	DECLARE CONTINUE HANDLER FOR NOT FOUND
-	SET row_not_found = TRUE;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND
+    SET row_not_found = TRUE;
         
-	INSERT INTO posts (user_id, content) VALUES (NEW.user_id, 'just joined!');
-	SET new_post_id = LAST_INSERT_ID();
+    INSERT INTO posts (user_id, content) VALUES (NEW.user_id, 'just joined!');
+    SET new_post_id = LAST_INSERT_ID();
         
-	DELETE FROM notifications;
+    DELETE FROM notifications;
     
     OPEN users_cursor;
     user_loop: LOOP
     FETCH users_cursor INTO new_user_id;
     IF row_not_found THEN
 	LEAVE user_loop;
-		END IF;
-    INSERT INTO notifications (user_id, post_id) VALUES (new_user_id, new_post_id);
+    END IF;
+    INSERT INTO notifications (user_id, post_id) 
+    VALUES 
+    (new_user_id, new_post_id);
   END LOOP;
   CLOSE users_cursor; -- LOOK I CLOSED MY CURSOR THIS TIME!!! :D
 END;;
 DELIMITER ;
 
 
-
-/*
-DELIMITER ;;
-CREATE TRIGGER new_user_added
-AFTER INSERT ON users
-FOR EACH ROW
-BEGIN
-  INSERT INTO notifications (user_id, post_id)
-  SELECT user_id, NULL
-  FROM users
-  WHERE user_id != NEW.user_id;
-END;;
-DELIMITER ;
-*/
-
-/*
-DELIMITER ;;
-CREATE EVENT IF NOT EXISTS remove_stale_sessions
+CREATE EVENT IF NOT EXISTS remove_old_sessions
 ON SCHEDULE EVERY 10 SECOND
 DO
-  DELETE FROM sessions
-  WHERE updated_on < NOW() - INTERVAL 2 HOUR;
-END;;
-DELIMITER ;
-*/
+DELETE FROM sessions 
+WHERE updated_on < NOW() - INTERVAL 2 HOUR;
 
 /*
 DELIMITER ;;
