@@ -93,8 +93,8 @@ BEGIN
 		SELECT u.user_id, p.post_id
 			FROM users u
 				INNER JOIN posts p
-					ON u.user_id = p.user_id
-			GROUP BY u.user_id;
+					ON u.user_id = p.user_id;
+			-- GROUP BY u.user_id;
             
 	DECLARE CONTINUE HANDLER FOR NOT FOUND
 		SET row_not_found = TRUE;
