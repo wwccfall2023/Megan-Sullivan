@@ -88,7 +88,11 @@ LEFT JOIN users u ON n.user_id = u.user_id
 LEFT JOIN posts p ON n.post_id = p.post_id;
 
 
-/*
+-- This uses a CURSOR
+-- Here's some psuedo-code:
+-- Create a new post with the desired message.
+-- For each user that isn't the newly joined user:
+-- Add a notification with that users's ID and the post ID.
 DELIMITER ;;
 CREATE TRIGGER after_user_insert
 AFTER INSERT ON users
@@ -100,14 +104,14 @@ BEGIN
     DECLARE row_not_found TINYINT DEFAULT FALSE;
 	
     DECLARE users_cursor CURSOR FOR 
-		SELECT user_id 
-		FROM users 
-		WHERE user_id != NEW.user_id;
+		SELECT u.user_id 
+		FROM users u
+		WHERE u.user_id != NEW.user_id;
             
     DECLARE CONTINUE HANDLER FOR NOT FOUND
     SET row_not_found = TRUE;
         
-    INSERT INTO posts (user_id, content) VALUES (NEW.user_id, 'just joined!');
+    INSERT INTO posts (posts.user_id, posts.content) VALUES (NEW.user_id, 'just joined!');
     SET new_post_id = LAST_INSERT_ID();
         
     DELETE FROM notifications;
@@ -125,7 +129,7 @@ BEGIN
   CLOSE users_cursor; -- LOOK I CLOSED MY CURSOR THIS TIME!!! :D
 END;;
 DELIMITER ;
-*/
+
 
 CREATE EVENT IF NOT EXISTS remove_old_sessions
 ON SCHEDULE EVERY 10 SECOND
