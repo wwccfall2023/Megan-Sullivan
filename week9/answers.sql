@@ -139,7 +139,7 @@ WHERE updated_on < NOW() - INTERVAL 2 HOUR;
 
 
 DELIMITER ;;
-CREATE PROCEDURE add_post(IN user_id_arg INT, IN content_arg TEXT)
+CREATE PROCEDURE add_post(IN user_id INT, IN content TEXT)
 BEGIN
   DECLARE new_post_id INT;
   DECLARE new_friend_id INT;
@@ -148,13 +148,13 @@ BEGIN
   DECLARE friend_cursor CURSOR FOR 
   SELECT f.friend_id 
   FROM friends f
-  WHERE f.user_id = user_id_arg;
+  WHERE f.user_id = user_id;
   
   DECLARE CONTINUE HANDLER FOR NOT FOUND
   SET row_not_found = TRUE;
 
   -- Create a new post with the desired message
-  INSERT INTO posts (posts.user_id, posts.content) VALUES (user_id_arg, content_arg);
+  INSERT INTO posts (posts.user_id, posts.content) VALUES (user_id, content);
   SET new_post_id = LAST_INSERT_ID();
 
   -- Add a notification for each of the user's friends
@@ -164,7 +164,7 @@ BEGIN
     IF row_not_found THEN
 	LEAVE friend_loop;
     END IF;
-    INSERT INTO notifications (user_id_arg, post_id_arg) VALUES (new_friend_id, new_post_id);
+    INSERT INTO notifications (user_id, post_id) VALUES (new_friend_id, new_post_id);
   END LOOP;
   CLOSE friend_cursor;
 END;;
