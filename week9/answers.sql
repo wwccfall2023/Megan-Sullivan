@@ -111,7 +111,7 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR NOT FOUND
     SET row_not_found = TRUE;
         
-    INSERT INTO posts (posts.user_id, posts.content) VALUES (NEW.user_id, 'just joined!');
+    INSERT INTO posts (posts.user_id, posts.content) VALUES (NEW.user_id, concat(users.first_name,  ' ' ,users.last_name, ' ' ,'just joined!'));
     SET new_post_id = LAST_INSERT_ID();
         
     DELETE FROM notifications;
