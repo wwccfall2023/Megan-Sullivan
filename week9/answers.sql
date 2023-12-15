@@ -88,7 +88,7 @@ LEFT JOIN users u ON n.user_id = u.user_id
 LEFT JOIN posts p ON n.post_id = p.post_id;
 
 
-
+/*
 DELIMITER ;;
 CREATE TRIGGER after_user_insert
 AFTER INSERT ON users
@@ -125,7 +125,7 @@ BEGIN
   CLOSE users_cursor; -- LOOK I CLOSED MY CURSOR THIS TIME!!! :D
 END;;
 DELIMITER ;
-
+*/
 
 CREATE EVENT IF NOT EXISTS remove_old_sessions
 ON SCHEDULE EVERY 10 SECOND
@@ -133,7 +133,7 @@ DO
 DELETE FROM sessions 
 WHERE updated_on < NOW() - INTERVAL 2 HOUR;
 
-/*
+
 DELIMITER ;;
 CREATE PROCEDURE add_post(IN user_id_arg INT, IN content_arg TEXT)
 BEGIN
@@ -165,4 +165,4 @@ BEGIN
   CLOSE friend_cursor;
 END;;
 DELIMITER ;
-*/
+
