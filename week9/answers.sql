@@ -138,23 +138,36 @@ DO
 DELETE FROM sessions 
 WHERE updated_on < NOW() - INTERVAL 2 HOUR;
 
-/*
+
 DELIMITER ;;
-CREATE PROCEDURE add_post(IN user_id_param INT, IN content_param TEXT)
+CREATE PROCEDURE add_post(IN user_id INT, IN content TEXT)
 BEGIN
-  -- Insert the new post
-  INSERT INTO posts (user_id, content)
-  VALUES (user_id_param, content_param);
+  DECLARE new_post_id INT;
+  DECLARE new_friend_id INT;
+  DECLARE row_not_found TINYINT DEFAULT FALSE;
   
-  -- Get the last inserted post_id
-  SET @last_post_id = LAST_INSERT_ID();
+  DECLARE friend_cursor CURSOR FOR 
+  SELECT friend_id 
+  FROM friends 
+  WHERE user_id = user_id;
   
-  -- Insert notifications for all friends
-  INSERT INTO notifications (user_id, post_id)
-  SELECT friend_id, @last_post_id
-  FROM friends
-  WHERE user_id = user_id_param;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND
+    SET row_not_found = TRUE;
+
+  -- Create a new post with the desired message
+  INSERT INTO posts (user_id, content) VALUES (user_id, content);
+    SET new_post_id = LAST_INSERT_ID();
+
+  -- Add a notification for each of the user's friends
+  OPEN friend_cursor;
+  friend_loop: LOOP
+    FETCH friend_cursor INTO new_friend_id;
+    IF row_not_found THEN
+		LEAVE friend_loop;
+	END IF;
+    INSERT INTO notifications (user_id, post_id) VALUES (new_friend_id, new_post_id);
+  END LOOP;
+  CLOSE friend_cursor;
 END;;
 DELIMITER ;
-*/
 
