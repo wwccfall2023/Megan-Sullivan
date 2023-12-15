@@ -1,8 +1,3 @@
-
--- Create your tables, views, functions and procedures here!
-DROP SCHEMA IF EXISTS social;
-CREATE SCHEMA social;
-USE social;
 -- Create your tables, views, functions and procedures here!
 DROP SCHEMA IF EXISTS social;
 CREATE SCHEMA social;
