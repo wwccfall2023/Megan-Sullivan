@@ -150,7 +150,7 @@ BEGIN
     SET row_not_found = TRUE;
 
   -- Create a new post with the desired message
-  INSERT INTO posts (user_id, content) VALUES (user_id, content);
+  INSERT INTO posts (posts.user_id, posts.content) VALUES (user_id, content);
     SET new_post_id = LAST_INSERT_ID();
 
   -- Add a notification for each of the user's friends
@@ -158,8 +158,8 @@ BEGIN
   friend_loop: LOOP
     FETCH friend_cursor INTO new_friend_id;
     IF row_not_found THEN
-		LEAVE friend_loop;
-	END IF;
+	LEAVE friend_loop;
+    END IF;
     INSERT INTO notifications (user_id, post_id) VALUES (new_friend_id, new_post_id);
   END LOOP;
   CLOSE friend_cursor;
