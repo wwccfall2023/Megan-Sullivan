@@ -90,7 +90,7 @@ BEGIN
     DECLARE row_not_found TINYINT DEFAULT FALSE;
     
     DECLARE users_cursor CURSOR FOR
-		SELECT u.user_id, u.first_name, u.last_name
+		SELECT u.user_id, p.post_id
 			FROM users u
 				INNER JOIN posts p
 					ON u.user_id = p.user_id
