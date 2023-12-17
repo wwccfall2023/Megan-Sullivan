@@ -277,6 +277,7 @@ BEGIN
 			(id, winner_name);
 			
 	END LOOP character_loop;
+    CLOSE characters_cursor;
 END;;
 DELIMITER ;
 
